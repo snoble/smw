@@ -1,34 +1,34 @@
-title,release_date,released,cumulative_gross,as_of,type,date_source,notes
-The Devil Wears Prada 2,2026-04-30,true,220446934,2026-07-13,comedy,est,season opener
-Obsession,2026-05-15,true,253322400,2026-07-13,drama,est,
-Mortal Kombat II,2026-05-22,true,79755207,2026-07-13,franchise,est,
-Star Wars: The Mandalorian and Grogu,2026-05-22,true,177364989,2026-07-13,franchise,known,
-Backrooms,2026-05-29,true,194197303,2026-07-13,horror,est,
-Scary Movie,2026-06-05,true,107493031,2026-07-13,comedy,known,
-Masters of the Universe,2026-06-05,true,64257291,2026-07-13,franchise,est,
-Disclosure Day,2026-06-12,true,111313915,2026-07-13,drama,known,
-Toy Story 5,2026-06-19,true,403772720,2026-07-13,animation,known,
-Supergirl,2026-06-26,true,66001114,2026-07-13,superhero,known,
-The Sheep Detectives,2026-06-26,true,65981673,2026-07-13,animation,est,
-Minions & Monsters,2026-07-01,true,108273335,2026-07-13,animation,known,
-Moana,2026-07-10,true,43000000,2026-07-13,animation,known,live-action; early in run
-Cut Off,2026-07-17,false,0,2026-07-13,drama,known,unreleased
-The Odyssey,2026-07-17,false,0,2026-07-13,drama,known,unreleased (Nolan)
-Spider-Man: Brand New Day,2026-07-31,false,0,2026-07-13,superhero,known,unreleased
-Ice Cream Man,2026-08-07,false,0,2026-07-13,horror,known,unreleased
-One Night Only,2026-08-07,false,0,2026-07-13,comedy,known,unreleased
-Super Troopers 3,2026-08-07,false,0,2026-07-13,comedy,known,unreleased
-The End of Oak Street,2026-08-14,false,0,2026-07-13,horror,known,unreleased
-PAW Patrol: The Dino Movie,2026-08-14,false,0,2026-07-13,animation,known,unreleased
-The Rivals of Amziah King,2026-08-14,false,0,2026-07-13,drama,known,unreleased
-Insidious: Out of the Further,2026-08-21,false,0,2026-07-13,horror,known,unreleased
-Mutiny,2026-08-21,false,0,2026-07-13,franchise,known,unreleased
-Spa Weekend,2026-08-21,false,0,2026-07-13,comedy,known,unreleased
-Cliffhanger,2026-08-28,false,0,2026-07-13,franchise,known,unreleased
-Coyote vs. Acme,2026-08-28,false,0,2026-07-13,animation,known,unreleased
-The Dog Stars,2026-08-28,false,0,2026-07-13,drama,known,unreleased
-Finding Emily,2026-08-28,false,0,2026-07-13,drama,known,unreleased
-Fall 2: Deadpoint,2026-09-02,false,0,2026-07-13,franchise,known,unreleased; ~5 days before cutoff
-Evil Dead Burn,2026-05-08,true,0,2026-07-13,horror,est,dark-horse pick; low gross
-Jackass: Best and Last,2026-08-07,false,0,2026-07-13,comedy,est,dark-horse pick
-Billie Eilish: Hit Me Hard and Soft,2026-06-05,true,0,2026-07-13,drama,est,concert doc; dark-horse pick
+title,release_date,released,cumulative_gross,as_of,type,date_source,opening_prior_m,notes
+The Devil Wears Prada 2,2026-04-30,true,220446934,2026-07-13,comedy,est,,season opener
+Obsession,2026-05-15,true,253322400,2026-07-13,drama,est,,
+Mortal Kombat II,2026-05-22,true,79755207,2026-07-13,franchise,est,,
+Star Wars: The Mandalorian and Grogu,2026-05-22,true,177364989,2026-07-13,franchise,known,,
+Backrooms,2026-05-29,true,194197303,2026-07-13,horror,est,,
+Scary Movie,2026-06-05,true,107493031,2026-07-13,comedy,known,,
+Masters of the Universe,2026-06-05,true,64257291,2026-07-13,franchise,est,,
+Disclosure Day,2026-06-12,true,111313915,2026-07-13,drama,known,,
+Toy Story 5,2026-06-19,true,403772720,2026-07-13,animation,known,,
+Supergirl,2026-06-26,true,66001114,2026-07-13,superhero,known,,
+The Sheep Detectives,2026-06-26,true,65981673,2026-07-13,animation,est,,
+Minions & Monsters,2026-07-01,true,108273335,2026-07-13,animation,known,,
+Moana,2026-07-10,true,43000000,2026-07-13,animation,known,,live-action; early in run
+Cut Off,2026-07-17,false,0,2026-07-13,drama,known,8,unreleased; mid specialty
+The Odyssey,2026-07-17,false,0,2026-07-13,drama,known,85,unreleased (Nolan event)
+Spider-Man: Brand New Day,2026-07-31,false,0,2026-07-13,superhero,known,180,unreleased; tentpole (slider overrides)
+Ice Cream Man,2026-08-07,false,0,2026-07-13,horror,known,18,unreleased; mid horror
+One Night Only,2026-08-07,false,0,2026-07-13,comedy,known,6,unreleased; small comedy
+Super Troopers 3,2026-08-07,false,0,2026-07-13,comedy,known,14,unreleased; cult comedy
+The End of Oak Street,2026-08-14,false,0,2026-07-13,horror,known,12,unreleased; lower-tier horror
+PAW Patrol: The Dino Movie,2026-08-14,false,0,2026-07-13,animation,known,40,unreleased; family tentpole-lite
+The Rivals of Amziah King,2026-08-14,false,0,2026-07-13,drama,known,7,unreleased; specialty drama
+Insidious: Out of the Further,2026-08-21,false,0,2026-07-13,horror,known,30,unreleased; horror franchise
+Mutiny,2026-08-21,false,0,2026-07-13,franchise,known,45,unreleased; mid franchise
+Spa Weekend,2026-08-21,false,0,2026-07-13,comedy,known,4,unreleased; micro comedy
+Cliffhanger,2026-08-28,false,0,2026-07-13,franchise,known,28,unreleased; short runway remake
+Coyote vs. Acme,2026-08-28,false,0,2026-07-13,animation,known,22,unreleased; short runway toon
+The Dog Stars,2026-08-28,false,0,2026-07-13,drama,known,5,unreleased; tiny drama runway
+Finding Emily,2026-08-28,false,0,2026-07-13,drama,known,3,unreleased; micro drama
+Fall 2: Deadpoint,2026-09-02,false,0,2026-07-13,franchise,known,20,unreleased; ~5 days before cutoff
+Evil Dead Burn,2026-05-08,true,0,2026-07-13,horror,est,,dark-horse pick; low gross
+Jackass: Best and Last,2026-08-07,false,0,2026-07-13,comedy,est,22,dark-horse pick; event comedy
+Billie Eilish: Hit Me Hard and Soft,2026-06-05,true,0,2026-07-13,drama,est,,concert doc; dark-horse pick

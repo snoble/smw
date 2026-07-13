@@ -1,0 +1,53 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare Pages site
+        run: |
+          test -f site/smw2026_wasm.html
+          mkdir -p _site
+          cp -a site/. _site/
+          cat > _site/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Summer Movie Wager 2026</title>
+            <meta http-equiv="refresh" content="0; url=smw2026_wasm.html">
+            <link rel="canonical" href="smw2026_wasm.html">
+          </head>
+          <body>
+            <p><a href="smw2026_wasm.html">Open the Summer Movie Wager 2026 viewer</a></p>
+          </body>
+          </html>
+          EOF
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

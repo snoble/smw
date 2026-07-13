@@ -1,8 +1,10 @@
 # Julia depot kept inside the project by shell.nix
 /.julia_depot/
+/.julia_versions/
 
 # Julia
 /Manifest.toml
+/wasm/Manifest.toml
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
@@ -21,3 +23,6 @@
 /output/
 *.jls
 *.arrow
+
+# Local Julia 1.12 install used for Snapshot / WasmTarget builds
+# (CI deploys the committed site/ directory to GitHub Pages)

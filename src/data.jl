@@ -9,6 +9,8 @@ struct Film
     as_of::Date
     type::String
     notes::String
+    """Expected opening-week domestic gross in millions USD; `missing` → type default."""
+    opening_prior_m::Union{Missing,Float64}
 end
 
 struct Observation
@@ -42,8 +44,14 @@ t_cutoff(release::Date) = run_weeks(release, SEASON_CUTOFF)
 
 function load_films(path::AbstractString)
     df = CSV.read(path, DataFrame)
+    has_opening = "opening_prior_m" in names(df)
     films = Film[]
     for row in eachrow(df)
+        opening = if has_opening && !ismissing(row.opening_prior_m) && row.opening_prior_m !== ""
+            Float64(row.opening_prior_m)
+        else
+            missing
+        end
         push!(
             films,
             Film(
@@ -54,6 +62,7 @@ function load_films(path::AbstractString)
                 Date(row.as_of),
                 String(row.type),
                 ismissing(row.notes) ? "" : String(row.notes),
+                opening,
             ),
         )
     end

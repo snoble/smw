@@ -14,6 +14,31 @@ const DATA = joinpath(@__DIR__, "..", "data")
     @test cumulative_gross(100.0, 0.5, 0.0) == 0.0
 end
 
+@testset "season_total banked + future" begin
+    # Unreleased: ordinary curve
+    @test season_total(100.0, 0.5, 2.0) ≈ 150.0
+    # Released: G = banked * (1 - d^t_cut) / (1 - d^t_now) >= banked
+    C = 253_000_000.0
+    d = 0.55
+    t_now = 8.0
+    t_cut = 16.0
+    G = season_total(1.0, d, t_cut; banked = C, t_now = t_now)  # O unused when banked>0
+    @test G > C
+    @test G ≈ C * (1 - d^t_cut) / (1 - d^t_now)
+    # Past cutoff: just banked
+    @test season_total(1.0, d, 7.0; banked = C, t_now = 8.0) == C
+    # Mid-opening-weekend weak gross must NOT 5–6× (Moana-style bug)
+    C_early = 43_000_000.0
+    t_early = 0.4
+    t_long = 8.4
+    G_raw = C_early * (1 - d^t_long) / (1 - d^t_early)  # singular-ish ratio ≈ 5×+
+    G_pin = season_total(1.0, d, t_long; banked = C_early, t_now = t_early)
+    @test G_raw / C_early > 4
+    @test G_pin ≈ C_early * (1 - d^t_long) / (1 - d^1.0)
+    @test G_pin / C_early < 3
+    @test G_pin > C_early
+end
+
 @testset "score_pick rules" begin
     @test score_pick(1, 1) == 13
     @test score_pick(10, 10) == 13
@@ -73,6 +98,12 @@ end
     @test t_cutoff(Date(2026, 8, 28)) ≈ run_weeks(Date(2026, 8, 28), SEASON_CUTOFF)
     # Unknown pick title should error
     @test_throws ErrorException load_picks(joinpath(DATA, "picks_2026.csv"), Film[])
+    # Curated openings differentiate same-type unreleased titles
+    paw = only(f for f in season.films if f.title == "PAW Patrol: The Dino Movie")
+    coyote = only(f for f in season.films if f.title == "Coyote vs. Acme")
+    @test !ismissing(paw.opening_prior_m) && !ismissing(coyote.opening_prior_m)
+    @test paw.opening_prior_m > coyote.opening_prior_m
+    @test unreleased_prior(paw).μ_logO > unreleased_prior(coyote).μ_logO
 end
 
 @testset "prior predictive sanity" begin
@@ -130,7 +161,7 @@ end
     n = length(season.films)
     Random.seed!(1)
     # Fake posterior draws from prior predictive (fast)
-    G = prior_predictive_grosses(season; n_draws = 40, seed = 3)
+    G = prior_predictive_grosses(season; n_draws = 80, seed = 3)
     titles = [f.title for f in season.films]
     result = simulate_outcomes(titles, G, season.picks)
     @test size(result.rank_prob) == (n, 10)
@@ -139,4 +170,20 @@ end
     @test abs(sum(result.win_shared) - 1.0) < 1e-9 || sum(result.win_shared) >= 1.0 - 1e-9
     # win_shared sums to >= 1 because ties count multiple players; sole sums <= 1
     @test sum(result.win_sole) <= 1.0 + 1e-9
+    @test !isempty(result.win_scenarios)
+    for s in result.win_scenarios
+        @test length(s.ranking) == 10
+        @test s.n_wins >= 1
+        @test 1 <= s.draw <= size(result.G, 2)
+        @test s.score == score_list(season.picks[s.player], s.ranking)
+        # Player is sole or tied first on their win list
+        all_scores = Dict(p => score_list(pk, s.ranking) for (p, pk) in season.picks)
+        @test s.score == maximum(values(all_scores))
+    end
+    # Every player with a shared win gets a scenario
+    for (i, p) in enumerate(result.players)
+        if result.win_shared[i] > 0
+            @test any(s -> s.player == p, result.win_scenarios)
+        end
+    end
 end

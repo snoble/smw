@@ -13,8 +13,8 @@ println("Observations: ", length(season.observations))
 println("Players: ", join(keys(season.picks), ", "))
 
 overrides = Dict{String,NamedTuple}(
-    "Spider-Man: Brand New Day" => (logO_mean = log(150_000_000), logO_std = 0.4),
-    "The Odyssey" => (logO_mean = log(80_000_000), logO_std = 0.5),
+    "Spider-Man: Brand New Day" => (logO_mean = log(180_000_000), logO_std = 0.2),
+    "The Odyssey" => (logO_mean = log(80_000_000), logO_std = 0.35),
 )
 
 println("Sampling posterior (small draw count)…")
@@ -37,6 +37,9 @@ println("\nWin probability (sole or tied first):")
 for (p, w) in zip(sim.players, sim.win_shared)
     println("  ", rpad(p, 12), " ", round(100 * w; digits = 1), "%")
 end
+
+println()
+print_win_scenarios(sim)
 
 mkpath(joinpath(@__DIR__, "..", "output"))
 println("\nSmoke OK.")
