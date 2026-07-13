@@ -24,6 +24,8 @@ begin
 	root = normpath(joinpath(@__DIR__, ".."))
 	Pkg.activate(root)
 	Pkg.instantiate()
+	# Revise picks up src/ edits; without it Pluto keeps a stale SMW until restart.
+	using Revise
 	using SMW
 	using CairoMakie
 	using Statistics
@@ -41,8 +43,11 @@ Posterior over the **full candidate field** through Labor Day (Sep 7), then wage
 for all six players. Season total = **banked + positive remaining**.
 
 **Opening sliders** below cover the unreleased titles that can actually move the Top 10 /
-standings. Everything else uses `opening_prior_m` from `data/films_2026.csv`. Update
-weekly CSVs, then re-run (or bump samples) to bust the cache.
+standings. Everything else uses `opening_prior_m` from `data/films_2026.csv`.
+
+Browser refresh does **not** reload `SMW` — after model/data code changes, reopen via
+`/open?secret=…&path=notebooks/smw2026.jl` (or restart Pluto). Bump samples to
+invalidate the posterior `.jls` cache.
 """
 
 # ╔═╡ 33333333-3333-3333-3333-333333333333
@@ -119,7 +124,7 @@ begin
 	cache_key = joinpath(
 		root,
 		"output",
-		"posterior_v3_s$(n_samples)_sp$(spidey_open)_od$(odyssey_open)_paw$(paw_open)_mu$(mutiny_open)_in$(insidious_open).jls",
+		"posterior_v4_s$(n_samples)_sp$(spidey_open)_od$(odyssey_open)_paw$(paw_open)_mu$(mutiny_open)_in$(insidious_open).jls",
 	)
 	if isfile(cache_key)
 		posterior = open(deserialize, cache_key, "r")

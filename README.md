@@ -34,6 +34,12 @@ The first instantiate can take 10+ minutes (Turing + Makie precompile).
 nix-shell --run 'julia --project -e "using Pkg; Pkg.test()"'
 ```
 
+With line coverage (writes `lcov.info`, fails below 95%):
+
+```bash
+nix-shell --run 'julia --project scripts/coverage.jl'
+```
+
 ## Launch the notebook
 
 Pluto cannot load a local package through its built-in package manager. The notebook

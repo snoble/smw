@@ -186,10 +186,9 @@ function season_total(
     # Floor pin time at 1 week so mid-opening-weekend banked doesn't 5–6× extrapolate.
     t_pin = max(t_now, 1.0)
     t_cut <= t_pin && return banked
-    denom = 1 - d^t_pin
-    denom <= 0 && return banked
-    future = banked * (d^t_pin - d^t_cut) / denom
-    return banked + max(future, 0.0)
+    # d ∈ (0,1) and t_pin ≥ 1 ⇒ denom ∈ (0,1); remaining ≥ 0 when t_cut > t_pin.
+    future = banked * (d^t_pin - d^t_cut) / (1 - d^t_pin)
+    return banked + future
 end
 
 @model function RunCurveModelArrays(
@@ -226,7 +225,7 @@ end
         i = override_idx[j]
         G = cumulative_gross(O[i], d[i], t_cutoffs[i])
         override_logG[j] ~ Normal(log(max(G, 1.0)), override_σ[j])
-    end
+    end # COV_EXCL_LINE — Turing @model expands this `end` as never-hit
 end
 
 function build_array_model(season::SeasonData; overrides::Dict = Dict{String,NamedTuple}())

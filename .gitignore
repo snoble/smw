@@ -8,6 +8,7 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
+/lcov.info
 /docs/build/
 
 # Pluto notebook autosave / backups
