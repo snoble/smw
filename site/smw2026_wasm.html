@@ -1811,98 +1811,18 @@ function __piSetTheme(t){document.documentElement.setAttribute('data-theme',t);t
 <main>
 <div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000001"><div class="markdown"><h1 id="Summer-Movie-Wager-2026">Summer Movie Wager 2026</h1>
 <p>Labor Day domestic box-office posterior for the <strong>full 33-film field</strong>, then wager outcomes for all six players.</p>
-<p>Season total &#61; already banked &#43; positive remaining. Spider-Man hasn&#39;t opened — the slider is only a <strong>sensitivity control</strong> over four opening scenarios; released films stay pinned to observed grosses.</p>
-<p>Draws/scenario: 300. Cutoff: Sep 7.</p>
+<p>Season total &#61; already banked &#43; positive remaining. Opening sliders are a <strong>precomputed sensitivity grid</strong> &#40;Wasm cannot re-fit Turing live&#41;. Released films stay pinned to observed grosses. Moana-style mid-opening pins floor at 1 week.</p>
+<p>Draws/scenario: 100. Scenarios: 72. Cutoff: Sep 7.</p>
 </div></pluto-output></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000002">4×33 Matrix{Int64}:
- 0  0  0  0  0  0  0  0  1000  0  0  0  0  …  0  0  0  0  0  0  0  0  0  0  0  0  0
- 0  0  0  0  0  0  0  0   983  0  0  0  0     0  0  0  0  0  0  0  0  0  0  0  0  0
- 0  0  0  0  0  0  0  0   943  0  0  0  0     0  0  0  0  0  0  0  0  0  0  0  0  0
- 0  0  0  0  0  0  0  0   793  0  0  0  0     0  0  0  0  0  0  0  0  0  0  0  0  0</pluto-output><pre class="pl-code"><code class="pl-jl">begin
-	using PlutoUI: Slider as UISlider
-	const OPENINGS = Int[100, 150, 180, 220]
-	const N_FILM = 33
-	const TITLES = String[
-    "The Devil Wears Prada 2",
-    "Obsession",
-    "Mortal Kombat II",
-    "Star Wars: The Mandalorian and Grogu",
-    "Backrooms",
-    "Scary Movie",
-    "Masters of the Universe",
-    "Disclosure Day",
-    "Toy Story 5",
-    "Supergirl",
-    "The Sheep Detectives",
-    "Minions &amp; Monsters",
-    "Moana",
-    "Cut Off",
-    "The Odyssey",
-    "Spider-Man: Brand New Day",
-    "Ice Cream Man",
-    "One Night Only",
-    "Super Troopers 3",
-    "The End of Oak Street",
-    "PAW Patrol: The Dino Movie",
-    "The Rivals of Amziah King",
-    "Insidious: Out of the Further",
-    "Mutiny",
-    "Spa Weekend",
-    "Cliffhanger",
-    "Coyote vs. Acme",
-    "The Dog Stars",
-    "Finding Emily",
-    "Fall 2: Deadpoint",
-    "Evil Dead Burn",
-    "Jackass: Best and Last",
-    "Billie Eilish: Hit Me Hard and Soft"
-]
-	const BANKED_M = Int[220, 253, 80, 177, 194, 107, 64, 111, 404, 66, 66, 108, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 10]
-	const ORDER = Int[
-    9 2 1 5 12 16 4 15 8 13 6 10 11 21 3 24 7 23 32 26 27 17 19 31 20 14 30 22 33 18 28 25 29
-    9 16 2 1 12 5 4 15 8 13 6 11 10 3 21 24 7 23 26 32 27 17 19 31 20 30 14 22 33 18 28 25 29
-    9 16 2 1 5 12 4 15 8 13 6 10 11 21 3 24 7 23 32 26 27 17 19 31 20 14 30 22 33 18 28 25 29
-    9 16 2 1 5 12 4 15 8 13 6 10 11 21 3 24 7 23 32 26 27 17 19 31 20 14 30 22 33 18 28 25 29
-]
-	const MED_M = Int[
-    222 258 82 182 205 117 69 127 509 100 99 203 123 15 148 183 26 9 23 17 82 12 41 77 6 34 28 6 4 14 19 36 10
-    222 258 82 182 204 116 69 127 513 99 99 208 121 14 145 283 26 10 23 18 79 12 42 73 6 36 29 6 4 16 19 35 10
-    222 258 82 182 205 117 69 127 509 100 99 203 123 15 148 329 26 9 23 17 82 12 41 77 6 34 28 6 4 14 19 36 10
-    222 258 82 182 205 117 69 127 509 100 99 203 123 15 148 402 26 9 23 17 82 12 41 77 6 34 28 6 4 14 19 36 10
-]
-	const LO_M = Int[
-    221 254 80 178 196 109 66 116 441 81 80 161 88 7 85 118 13 5 11 9 41 6 23 37 3 19 16 3 2 8 19 17 10
-    221 254 80 178 196 109 65 116 442 82 81 153 89 8 85 186 14 4 11 9 37 6 23 37 3 17 16 3 2 8 19 19 10
-    221 254 80 178 196 109 66 116 441 81 80 161 88 7 85 213 13 5 11 9 41 6 23 37 3 19 16 3 2 8 19 17 10
-    221 254 80 178 196 109 66 116 441 81 80 161 88 7 85 260 13 5 11 9 41 6 23 37 3 19 16 3 2 8 19 17 10
-]
-	const HI_M = Int[
-    231 277 89 196 228 133 78 151 618 135 134 260 172 31 272 291 52 18 43 33 149 24 84 142 10 62 52 12 7 31 19 77 12
-    232 275 87 195 227 132 79 148 649 130 135 288 174 29 280 445 50 20 44 36 167 24 77 141 11 69 62 12 7 29 19 67 12
-    231 277 89 196 228 133 78 151 618 135 134 260 172 31 272 524 52 18 43 33 149 24 84 142 10 62 52 12 7 31 19 77 12
-    231 277 89 196 228 133 78 151 618 135 134 260 172 31 272 640 52 18 43 33 149 24 84 142 10 62 52 12 7 31 19 77 12
-]
-	const TOP10_T = Int[
-    1000 1000 0 1000 1000 397 0 783 1000 163 140 1000 567 0 747 953 0 0 0 0 137 0 0 110 0 0 0 0 0 0 0 3 0
-    1000 1000 0 1000 1000 403 0 823 1000 140 137 1000 507 0 743 1000 0 0 0 0 147 0 3 97 0 0 0 0 0 0 0 0 0
-    1000 1000 0 1000 1000 377 0 783 1000 157 140 1000 557 0 743 1000 0 0 0 0 133 0 0 107 0 0 0 0 0 0 0 3 0
-    1000 1000 0 1000 1000 377 0 783 1000 157 140 1000 557 0 743 1000 0 0 0 0 133 0 0 107 0 0 0 0 0 0 0 3 0
-]
-	const FIRST_T = Int[
-    0 0 0 0 0 0 0 0 1000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 983 0 0 0 0 0 0 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 943 0 0 0 0 0 0 57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 793 0 0 0 0 0 0 207 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-]
-end</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000003"><div class="markdown"><h2 id="Spider-Man-opening-&#40;sensitivity-only&#41;">Spider-Man opening &#40;sensitivity only&#41;</h2>
-<p><strong>1</strong>&#61;&#36;100M · <strong>2</strong>&#61;&#36;150M · <strong>3</strong>&#61;&#36;180M · <strong>4</strong>&#61;&#36;220M</p>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000002"><pluto-tree class="collapsed Array"><pluto-tree-prefix></pluto-tree-prefix><pluto-tree-items class="Array"><p-r><p-k>1</p-k><p-v>"Peter: sole 68.0%, tied 75.0%, avg 54.4 · BJ: sole 9.0%, tied 14.0%, avg 47.3 · Germain: sole 8.0%, tied 12.0%, avg 47.0 · Devindra: sole 3.0%, tied 5.0%, avg 37.6 · Jeff: sole 3.0%, tied 3.0%, avg 45.5 · David: sole 0.0%, tied 0.0%, avg 36.8"</p-v></p-r><p-r><p-k>2</p-k><p-v>"Peter: sole 68.0%, tied 74.0%, avg 53.7 · BJ: sole 10.0%, tied 15.0%, avg 46.9 · Jeff: sole 10.0%, tied 10.0%, avg 45.8 · Germain: sole 3.0%, tied 5.0%, avg 46.3 · Devindra: sole 2.0%, tied 3.0%, avg 37.6 · David: sole 0.0%, tied 0.0%, avg 36.7"</p-v></p-r><p-r><p-k>3</p-k><p-v>"Peter: sole 58.0%, tied 67.0%, avg 52.5 · BJ: sole 10.0%, tied 18.0%, avg 46.5 · Germain: sole 11.0%, tied 12.0%, avg 46.4 · Jeff: sole 9.0%, tied 9.0%, avg 45.0 · Devindra: sole 3.0%, tied 3.0%, avg 37.5 · David: sole 0.0%, tied 0.0%, avg 36.0"</p-v></p-r><p-r><p-k>4</p-k><p-v>"Peter: sole 63.0%, tied 70.0%, avg 53.4 · BJ: sole 14.0%, tied 19.0%, avg 47.0 · Jeff: sole 6.0%, tied 8.0%, avg 45.6 · Germain: sole 6.0%, tied 7.0%, avg 46.8 · Devindra: sole 3.0%, tied 4.0%, avg 37.2 · David: sole 0.0%, tied 0.0%, avg 36.7"</p-v></p-r><p-r><p-k>5</p-k><p-v>"Peter: sole 62.0%, tied 69.0%, avg 53.8 · BJ: sole 16.0%, tied 22.0%, avg 47.2 · Jeff: sole 7.0%, tied 8.0%, avg 46.5 · Germain: sole 5.0%, tied 7.0%, avg 46.3 · Devindra: sole 1.0%, tied 4.0%, avg 37.8 · David: sole 0.0%, tied 0.0%, avg 36.9"</p-v></p-r><p-r><p-k>6</p-k><p-v>"Peter: sole 66.0%, tied 67.0%, avg 54.2 · BJ: sole 13.0%, tied 16.0%, avg 47.3 · Jeff: sole 7.0%, tied 8.0%, avg 46.3 · Germain: sole 7.0%, tied 7.0%, avg 47.0 · Devindra: sole 3.0%, tied 6.0%, avg 37.7 · David: sole 0.0%, tied 0.0%, avg 37.2"</p-v></p-r><p-r><p-k>7</p-k><p-v>"Peter: sole 62.0%, tied 67.0%, avg 51.6 · BJ: sole 16.0%, tied 22.0%, avg 46.1 · Germain: sole 6.0%, tied 8.0%, avg 45.1 · Jeff: sole 6.0%, tied 8.0%, avg 44.6 · Devindra: sole 3.0%, tied 3.0%, avg 36.6 · David: sole 0.0%, tied 0.0%, avg 35.7"</p-v></p-r><p-r><p-k>8</p-k><p-v>"Peter: sole 63.0%, tied 66.0%, avg 52.3 · Germain: sole 10.0%, tied 14.0%, avg 46.2 · Jeff: sole 10.0%, tied 11.0%, avg 45.6 · BJ: sole 8.0%, tied 10.0%, avg 45.9 · Devindra: sole 4.0%, tied 4.0%, avg 36.6 · David: sole 0.0%, tied 0.0%, avg 36.3"</p-v></p-r><p-r><p-k>9</p-k><p-v>"Peter: sole 64.0%, tied 68.0%, avg 54.0 · BJ: sole 14.0%, tied 24.0%, avg 47.8 · Jeff: sole 6.0%, tied 8.0%, avg 46.0 · Devindra: sole 2.0%, tied 7.0%, avg 38.7 · Germain: sole 3.0%, tied 5.0%, avg 45.7 · David: sole 0.0%, tied 0.0%, avg 36.6"</p-v></p-r><p-r><p-k>10</p-k><p-v>"Peter: sole 60.0%, tied 67.0%, avg 53.4 · BJ: sole 13.0%, tied 18.0%, avg 47.0 · Germain: sole 8.0%, tied 10.0%, avg 46.0 · Jeff: sole 9.0%, tied 10.0%, avg 46.0 · Devindra: sole 2.0%, tied 3.0%, avg 38.2 · David: sole 0.0%, tied 0.0%, avg 36.9"</p-v></p-r><p-r><p-k>11</p-k><p-v>"Peter: sole 63.0%, tied 69.0%, avg 54.6 · BJ: sole 14.0%, tied 19.0%, avg 48.1 · Jeff: sole 11.0%, tied 12.0%, avg 47.4 · Germain: sole 5.0%, tied 7.0%, avg 47.4 · Devindra: sole 0.0%, tied 2.0%, avg 38.4 · David: sole 0.0%, tied 0.0%, avg 38.0"</p-v></p-r><p-r><p-k>12</p-k><p-v>"Peter: sole 66.0%, tied 71.0%, avg 53.4 · BJ: sole 15.0%, tied 19.0%, avg 46.4 · Germain: sole 4.0%, tied 7.0%, avg 46.2 · Jeff: sole 6.0%, tied 7.0%, avg 46.0 · Devindra: sole 2.0%, tied 4.0%, avg 37.4 · David: sole 0.0%, tied 0.0%, avg 37.1"</p-v></p-r><p-r><p-k>13</p-k><p-v>"Peter: sole 55.0%, tied 59.0%, avg 53.5 · BJ: sole 22.0%, tied 26.0%, avg 47.9 · Jeff: sole 12.0%, tied 12.0%, avg 46.6 · Devindra: sole 3.0%, tied 6.0%, avg 39.2 · Germain: sole 3.0%, tied 3.0%, avg 46.2 · David: sole 0.0%, tied 0.0%, avg 37.5"</p-v></p-r><p-r><p-k>14</p-k><p-v>"Peter: sole 65.0%, tied 68.0%, avg 52.4 · BJ: sole 15.0%, tied 17.0%, avg 46.0 · Jeff: sole 7.0%, tied 9.0%, avg 44.8 · Germain: sole 6.0%, tied 8.0%, avg 44.5 · Devindra: sole 2.0%, tied 4.0%, avg 37.6 · David: sole 0.0%, tied 0.0%, avg 36.4"</p-v></p-r><p-r><p-k>15</p-k><p-v>"Peter: sole 63.0%, tied 66.0%, avg 51.7 · BJ: sole 18.0%, tied 23.0%, avg 46.5 · Jeff: sole 6.0%, tied 8.0%, avg 45.1 · Devindra: sole 3.0%, tied 5.0%, avg 36.8 · Germain: sole 3.0%, tied 5.0%, avg 44.2 · David: sole 0.0%, tied 0.0%, avg 36.2"</p-v></p-r><p-r><p-k>16</p-k><p-v>"Peter: sole 59.0%, tied 65.0%, avg 52.5 · BJ: sole 13.0%, tied 19.0%, avg 47.1 · Jeff: sole 12.0%, tied 14.0%, avg 46.0 · Germain: sole 7.0%, tied 8.0%, avg 45.1 · Devindra: sole 1.0%, tied 2.0%, avg 37.5 · David: sole 0.0%, tied 0.0%, avg 36.8"</p-v></p-r><p-r><p-k>17</p-k><p-v>"Peter: sole 61.0%, tied 64.0%, avg 55.0 · BJ: sole 14.0%, tied 18.0%, avg 48.5 · Jeff: sole 15.0%, tied 15.0%, avg 48.7 · Devindra: sole 4.0%, tied 5.0%, avg 40.5 · Germain: sole 2.0%, tied 2.0%, avg 47.2 · David: sole 0.0%, tied 0.0%, avg 37.6"</p-v></p-r><p-r><p-k>18</p-k><p-v>"Peter: sole 50.0%, tied 55.0%, avg 54.0 · BJ: sole 20.0%, tied 23.0%, avg 48.7 · Jeff: sole 14.0%, tied 18.0%, avg 48.5 · Germain: sole 6.0%, tied 6.0%, avg 46.7 · Devindra: sole 4.0%, tied 5.0%, avg 40.2 · David: sole 0.0%, tied 0.0%, avg 37.3"</p-v></p-r><p-r><p-k>19</p-k><p-v>"Peter: sole 51.0%, tied 59.0%, avg 53.0 · BJ: sole 17.0%, tied 27.0%, avg 47.1 · Jeff: sole 10.0%, tied 13.0%, avg 47.1 · Germain: sole 5.0%, tied 10.0%, avg 45.8 · Devindra: sole 4.0%, tied 6.0%, avg 38.8 · David: sole 0.0%, tied 0.0%, avg 36.5"</p-v></p-r><p-r><p-k>20</p-k><p-v>"Peter: sole 57.0%, tied 64.0%, avg 53.0 · BJ: sole 18.0%, tied 27.0%, avg 47.5 · Jeff: sole 8.0%, tied 13.0%, avg 47.6 · Germain: sole 2.0%, tied 5.0%, avg 45.5 · Devindra: sole 3.0%, tied 4.0%, avg 39.8 · David: sole 0.0%, tied 0.0%, avg 36.2"</p-v></p-r><p-r><p-k></p-k><p-v>more</p-v></p-r><p-r><p-k>63</p-k><p-v>"Peter: sole 44.0%, tied 46.0%, avg 54.9 · Germain: sole 28.0%, tied 30.0%, avg 51.1 · BJ: sole 7.0%, tied 9.0%, avg 48.3 · Jeff: sole 6.0%, tied 8.0%, avg 49.4 · David: sole 5.0%, tied 7.0%, avg 43.6 · Devindra: sole 5.0%, tied 5.0%, avg 41.9"</p-v></p-r><p-r><p-k>64</p-k><p-v>"Peter: sole 54.0%, tied 60.0%, avg 57.6 · Germain: sole 22.0%, tied 25.0%, avg 51.6 · Jeff: sole 6.0%, tied 8.0%, avg 51.0 · Devindra: sole 5.0%, tied 7.0%, avg 42.4 · BJ: sole 3.0%, tied 6.0%, avg 49.8 · David: sole 1.0%, tied 3.0%, avg 43.7"</p-v></p-r><p-r><p-k>65</p-k><p-v>"Peter: sole 43.0%, tied 48.0%, avg 58.4 · Germain: sole 29.0%, tied 29.0%, avg 53.1 · Jeff: sole 17.0%, tied 18.0%, avg 53.5 · BJ: sole 1.0%, tied 5.0%, avg 50.7 · Devindra: sole 3.0%, tied 3.0%, avg 44.4 · David: sole 2.0%, tied 2.0%, avg 44.2"</p-v></p-r><p-r><p-k>66</p-k><p-v>"Peter: sole 49.0%, tied 51.0%, avg 57.6 · Germain: sole 32.0%, tied 34.0%, avg 53.7 · Jeff: sole 11.0%, tied 12.0%, avg 52.2 · Devindra: sole 4.0%, tied 4.0%, avg 44.0 · BJ: sole 1.0%, tied 1.0%, avg 49.6 · David: sole 0.0%, tied 1.0%, avg 44.4"</p-v></p-r><p-r><p-k>67</p-k><p-v>"Peter: sole 40.0%, tied 43.0%, avg 55.8 · Germain: sole 23.0%, tied 26.0%, avg 51.8 · Jeff: sole 13.0%, tied 16.0%, avg 52.0 · Devindra: sole 12.0%, tied 13.0%, avg 44.2 · BJ: sole 3.0%, tied 5.0%, avg 48.9 · David: sole 2.0%, tied 4.0%, avg 43.8"</p-v></p-r><p-r><p-k>68</p-k><p-v>"Peter: sole 44.0%, tied 47.0%, avg 56.1 · Germain: sole 31.0%, tied 31.0%, avg 52.2 · Jeff: sole 13.0%, tied 13.0%, avg 52.1 · BJ: sole 5.0%, tied 8.0%, avg 50.1 · Devindra: sole 4.0%, tied 4.0%, avg 44.9 · David: sole 0.0%, tied 0.0%, avg 42.8"</p-v></p-r><p-r><p-k>69</p-k><p-v>"Peter: sole 47.0%, tied 50.0%, avg 57.6 · Germain: sole 32.0%, tied 34.0%, avg 52.6 · BJ: sole 5.0%, tied 7.0%, avg 49.9 · Devindra: sole 5.0%, tied 6.0%, avg 44.7 · Jeff: sole 5.0%, tied 5.0%, avg 51.5 · David: sole 1.0%, tied 3.0%, avg 44.3"</p-v></p-r><p-r><p-k>70</p-k><p-v>"Peter: sole 49.0%, tied 51.0%, avg 57.6 · Germain: sole 19.0%, tied 22.0%, avg 51.8 · Jeff: sole 11.0%, tied 12.0%, avg 52.2 · Devindra: sole 9.0%, tied 10.0%, avg 45.1 · BJ: sole 4.0%, tied 8.0%, avg 51.0 · David: sole 2.0%, tied 3.0%, avg 43.1"</p-v></p-r><p-r><p-k>71</p-k><p-v>"Peter: sole 44.0%, tied 47.0%, avg 56.5 · Germain: sole 20.0%, tied 21.0%, avg 50.8 · Jeff: sole 15.0%, tied 16.0%, avg 51.8 · Devindra: sole 8.0%, tied 9.0%, avg 44.3 · BJ: sole 5.0%, tied 6.0%, avg 49.6 · David: sole 4.0%, tied 5.0%, avg 43.9"</p-v></p-r><p-r><p-k>72</p-k><p-v>"Peter: sole 56.0%, tied 59.0%, avg 59.3 · Germain: sole 24.0%, tied 24.0%, avg 53.1 · Jeff: sole 7.0%, tied 8.0%, avg 52.8 · Devindra: sole 5.0%, tied 6.0%, avg 44.2 · David: sole 4.0%, tied 4.0%, avg 44.9 · BJ: sole 1.0%, tied 2.0%, avg 50.6"</p-v></p-r></pluto-tree-items></pluto-tree></pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000003"><div class="markdown"><h2 id="Opening-assumptions-&#40;&#36;M&#41;">Opening assumptions &#40;&#36;M&#41;</h2>
+<p>Spider-Man · Odyssey · PAW Patrol · Mutiny · Insidious</p>
 </div></pluto-output></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000004"><bond def="scen" unique_id="hgmlfxwatuvz"><input type='range' min='1' max='4' value='3'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000004"><bond def="sp_i" unique_id="rrqvxadsyqds"><input type='range' min='1' max='3' value='2'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
 
 					const input_el = currentScript.previousElementSibling
 					const output_el = currentScript.nextElementSibling
-					const displays = ["1", "2", "3", "4"]
+					const displays = ["1", "2", "3"]
 
 					let update_output = () => {
 						output_el.value = displays[input_el.valueAsNumber - 1]
@@ -1922,24 +1842,122 @@ end</code></pre></div>
     					font-size: 15px;
     					margin-left: 3px;
     					transform: translateY(-4px);
-    					display: inline-block;'>3</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind scen UISlider(1:4, default=3, show_value=true)</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000005">opening_for (generic function with 1 method)</pluto-output><pre class="pl-code"><code class="pl-jl">opening_for(scen::Int64)::Int64 = OPENINGS[scen]</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000006">180</pluto-output><pre class="pl-code"><code class="pl-jl">opening_for(Int64(scen))</code></pre></div>
+    					display: inline-block;'>2</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind sp_i UISlider(1:3, default=2, show_value=true)</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000014"><bond def="od_i" unique_id="tkurjnpzlegf"><input type='range' min='1' max='3' value='2'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
+
+					const input_el = currentScript.previousElementSibling
+					const output_el = currentScript.nextElementSibling
+					const displays = ["1", "2", "3"]
+
+					let update_output = () => {
+						output_el.value = displays[input_el.valueAsNumber - 1]
+					}
+					
+					input_el.addEventListener("input", update_output)
+					// We also poll for changes because the `input_el.value` can change from the outside, e.g. https://github.com/JuliaPluto/PlutoUI.jl/issues/277
+					let id = setInterval(update_output, 200)
+					invalidation.then(() => {
+						clearInterval(id)
+						input_el.removeEventListener("input", update_output)
+					})
+					
+};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",__run):__run();})();</script><output style='
+						font-family: system-ui;
+						font-variant-numeric: tabular-nums;
+    					font-size: 15px;
+    					margin-left: 3px;
+    					transform: translateY(-4px);
+    					display: inline-block;'>2</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind od_i UISlider(1:3, default=2, show_value=true)</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000015"><bond def="paw_i" unique_id="zlwfmqsnjvtb"><input type='range' min='1' max='2' value='2'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
+
+					const input_el = currentScript.previousElementSibling
+					const output_el = currentScript.nextElementSibling
+					const displays = ["1", "2"]
+
+					let update_output = () => {
+						output_el.value = displays[input_el.valueAsNumber - 1]
+					}
+					
+					input_el.addEventListener("input", update_output)
+					// We also poll for changes because the `input_el.value` can change from the outside, e.g. https://github.com/JuliaPluto/PlutoUI.jl/issues/277
+					let id = setInterval(update_output, 200)
+					invalidation.then(() => {
+						clearInterval(id)
+						input_el.removeEventListener("input", update_output)
+					})
+					
+};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",__run):__run();})();</script><output style='
+						font-family: system-ui;
+						font-variant-numeric: tabular-nums;
+    					font-size: 15px;
+    					margin-left: 3px;
+    					transform: translateY(-4px);
+    					display: inline-block;'>2</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind paw_i UISlider(1:2, default=2, show_value=true)</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000016"><bond def="mu_i" unique_id="pqhdzishuxvh"><input type='range' min='1' max='2' value='2'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
+
+					const input_el = currentScript.previousElementSibling
+					const output_el = currentScript.nextElementSibling
+					const displays = ["1", "2"]
+
+					let update_output = () => {
+						output_el.value = displays[input_el.valueAsNumber - 1]
+					}
+					
+					input_el.addEventListener("input", update_output)
+					// We also poll for changes because the `input_el.value` can change from the outside, e.g. https://github.com/JuliaPluto/PlutoUI.jl/issues/277
+					let id = setInterval(update_output, 200)
+					invalidation.then(() => {
+						clearInterval(id)
+						input_el.removeEventListener("input", update_output)
+					})
+					
+};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",__run):__run();})();</script><output style='
+						font-family: system-ui;
+						font-variant-numeric: tabular-nums;
+    					font-size: 15px;
+    					margin-left: 3px;
+    					transform: translateY(-4px);
+    					display: inline-block;'>2</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind mu_i UISlider(1:2, default=2, show_value=true)</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000017"><bond def="in_i" unique_id="uhygkxuabixj"><input type='range' min='1' max='2' value='2'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
+
+					const input_el = currentScript.previousElementSibling
+					const output_el = currentScript.nextElementSibling
+					const displays = ["1", "2"]
+
+					let update_output = () => {
+						output_el.value = displays[input_el.valueAsNumber - 1]
+					}
+					
+					input_el.addEventListener("input", update_output)
+					// We also poll for changes because the `input_el.value` can change from the outside, e.g. https://github.com/JuliaPluto/PlutoUI.jl/issues/277
+					let id = setInterval(update_output, 200)
+					invalidation.then(() => {
+						clearInterval(id)
+						input_el.removeEventListener("input", update_output)
+					})
+					
+};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",__run):__run();})();</script><output style='
+						font-family: system-ui;
+						font-variant-numeric: tabular-nums;
+    					font-size: 15px;
+    					margin-left: 3px;
+    					transform: translateY(-4px);
+    					display: inline-block;'>2</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind in_i UISlider(1:2, default=2, show_value=true)</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000005">scenario_id (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000006">openings_label (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000018">"Spidey 180M · Odyssey 85M · PAW 40M · Mutiny 45M · Insidious 30M"</pluto-output><pre class="pl-code"><code class="pl-jl">begin
+	scen = scenario_id(Int64(sp_i), Int64(od_i), Int64(paw_i), Int64(mu_i), Int64(in_i))
+	openings_label(Int64(sp_i), Int64(od_i), Int64(paw_i), Int64(mu_i), Int64(in_i))
+end</code></pre></div>
 <div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000007"><div class="markdown"><h2 id="Player-outcomes">Player outcomes</h2>
 <p><strong>sole</strong> &#61; alone in first · <strong>tied</strong> &#61; sole or shared first &#40;how the site shows ranks&#41; · <strong>avg</strong> &#61; mean final score</p>
 </div></pluto-output></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000008">standings_for (generic function with 1 method)</pluto-output><pre class="pl-code"><code class="pl-jl">function standings_for(scen::Int64)::String
-    scen == 1 &amp;&amp; return "Peter: sole 54.7%, tied 60.0%, avg 51.5 · BJ: sole 15.3%, tied 21.0%, avg 46.8 · Jeff: sole 14.0%, tied 16.3%, avg 46.3 · Germain: sole 4.3%, tied 6.7%, avg 44.9 · Devindra: sole 3.7%, tied 4.7%, avg 37.9 · David: sole 0.0%, tied 0.0%, avg 36.2"
-    scen == 2 &amp;&amp; return "Peter: sole 71.7%, tied 77.3%, avg 56.7 · BJ: sole 9.7%, tied 14.0%, avg 49.9 · Jeff: sole 10.3%, tied 12.7%, avg 50.4 · Germain: sole 2.0%, tied 2.3%, avg 46.1 · Devindra: sole 0.3%, tied 0.3%, avg 38.8 · David: sole 0.0%, tied 0.0%, avg 38.6"
-    scen == 3 &amp;&amp; return "Peter: sole 63.7%, tied 69.7%, avg 57.0 · Jeff: sole 14.0%, tied 16.0%, avg 52.2 · BJ: sole 8.7%, tied 14.7%, avg 51.0 · Germain: sole 4.0%, tied 4.3%, avg 47.2 · Devindra: sole 2.0%, tied 2.7%, avg 39.7 · David: sole 0.3%, tied 0.7%, avg 39.4"
-    scen == 4 &amp;&amp; return "Peter: sole 56.3%, tied 61.0%, avg 56.4 · Germain: sole 14.0%, tied 15.0%, avg 49.1 · Jeff: sole 12.0%, tied 13.3%, avg 51.7 · BJ: sole 6.3%, tied 10.7%, avg 50.4 · Devindra: sole 3.7%, tied 3.7%, avg 41.2 · David: sole 1.7%, tied 2.7%, avg 41.2"
-    return ""
-end</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000009">"Peter: sole 63.7%, tied 69.7%, avg 57.0 · Jeff: sole 14.0%, tied 16.0%, avg 52.2 · BJ: sole 8.7%, tied 14.7%, avg 51.0 · Germain: sole 4.0%, tied 4.3%, avg 47.2 · Devindra: sole 2.0%, tied 2.7%, avg 39.7 · David: sole 0.3%, tied 0.7%, avg 39.4"</pluto-output><pre class="pl-code"><code class="pl-jl">standings_for(Int64(scen))</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000008">standings_for (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000009">"Peter: sole 70.0%, tied 73.0%, avg 58.3 · BJ: sole 12.0%, tied 14.0%, avg 52.2 · Jeff: sole 12.0%, tied 13.0%, avg 53.0 · Germain: sole 3.0%, tied 3.0%, avg 47.5 · David: sole 0.0%, tied 0.0%, avg 39.8 · Devindra: sole 0.0%, tied 0.0%, avg 39.7"</pluto-output><pre class="pl-code"><code class="pl-jl">standings_for(Int64(scen))</code></pre></div>
 <div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000a"><div class="markdown"><h2 id="Full-predicted-Labor-Day-field-&#40;33-films&#41;">Full predicted Labor Day field &#40;33 films&#41;</h2>
 <p>Pick a predicted rank &#40;1 &#61; highest median season gross&#41;. Shows banked, median band, P&#40;Top 10&#41;, P&#40;#1&#41;.</p>
 </div></pluto-output></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000b"><bond def="rank" unique_id="louxwwlqgdoz"><input type='range' min='1' max='33' value='1'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000b"><bond def="rank" unique_id="pborwpqfpuik"><input type='range' min='1' max='33' value='1'><script>(function(){const currentScript=document.currentScript;const invalidation=new Promise(function(){});const __run=function(){
 
 					const input_el = currentScript.previousElementSibling
 					const output_el = currentScript.nextElementSibling
@@ -1964,51 +1982,16 @@ end</code></pre></div>
     					margin-left: 3px;
     					transform: translateY(-4px);
     					display: inline-block;'>1</output></bond></pluto-output><pre class="pl-code"><code class="pl-jl">@bind rank UISlider(1:33, default=1, show_value=true)</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000c">money (generic function with 1 method)</pluto-output><pre class="pl-code"><code class="pl-jl">function money(m::Int64)::String
-    m == Int64(0) &amp;&amp; return "--"
-    return string(m) * "M"
-end</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000d">pct_t (generic function with 1 method)</pluto-output><pre class="pl-code"><code class="pl-jl">function pct_t(t::Int64)::String
-    whole = t ÷ Int64(10)
-    frac = t - whole * Int64(10)
-    return string(whole) * "." * string(frac) * "%"
-end</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000e">film_at (generic function with 1 method)</pluto-output><pre class="pl-code"><code class="pl-jl">function film_at(scen::Int64, rank::Int64)::String
-    fi = ORDER[scen, rank]
-    return string(rank) * ". " * TITLES[fi] *
-        " | banked " * money(Int64(BANKED_M[fi])) *
-        " | med " * money(Int64(MED_M[scen, fi])) *
-        " (" * money(Int64(LO_M[scen, fi])) * "-" * money(Int64(HI_M[scen, fi])) * ")" *
-        " | Top10 " * pct_t(Int64(TOP10_T[scen, fi])) *
-        " | #1 " * pct_t(Int64(FIRST_T[scen, fi]))
-end</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000f">"1. Toy Story 5 | banked 404M | med 509M (441M-618M) | Top10 100.0% | #1 94.3%"</pluto-output><pre class="pl-code"><code class="pl-jl">film_at(Int64(scen), Int64(rank))</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000c">money (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000d">pct_t (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000e">film_at (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-00000000000f">"1. Toy Story 5 | banked 404M | med 500M (450M-602M) | Top10 100.0% | #1 97.0%"</pluto-output><pre class="pl-code"><code class="pl-jl">film_at(Int64(scen), Int64(rank))</code></pre></div>
 <div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000010"><div class="markdown"><h3 id="Nearby-ranks-&#40;same-scenario&#41;">Nearby ranks &#40;same scenario&#41;</h3>
 </div></pluto-output></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000011">nearby (generic function with 1 method)</pluto-output><pre class="pl-code"><code class="pl-jl">function nearby(scen::Int64, rank::Int64)::String
-    lo = rank - Int64(2)
-    if lo &lt; Int64(1)
-        lo = Int64(1)
-    end
-    hi = lo + Int64(4)
-    if hi &gt; N_FILM
-        hi = N_FILM
-        lo = hi - Int64(4)
-        if lo &lt; Int64(1)
-            lo = Int64(1)
-        end
-    end
-    out = film_at(scen, lo)
-    i = lo + Int64(1)
-    while i &lt;= hi
-        out = out * " || " * film_at(scen, i)
-        i = i + Int64(1)
-    end
-    return out
-end</code></pre></div>
-<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000012">"1. Toy Story 5 | banked 404M | med 509M (441M-618M) | Top10 100.0% | #1 94.3% || 2. Spider-Man: Brand New Day | banked -- | med 329M (213M-524M) | Top10 100.0% | #1 5.7% || 3. Obsession | banked 253M | med 258M (254M-277M) | Top10 100.0% | #1 0.0% || 4. The Devil Wears Prada 2 | banked 220M | med 222M (221M-231M) | Top10 100.0% | #1 0.0% || 5. Backrooms | banked 194M | med 205M (196M-228M) | Top10 100.0% | #1 0.0%"</pluto-output><pre class="pl-code"><code class="pl-jl">nearby(Int64(scen), Int64(rank))</code></pre></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000011">nearby (generic function with 1 method)</pluto-output></div>
+<div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000012">"1. Toy Story 5 | banked 404M | med 500M (450M-602M) | Top10 100.0% | #1 97.0% || 2. Spider-Man: Brand New Day | banked -- | med 337M (238M-464M) | Top10 100.0% | #1 3.0% || 3. Obsession | banked 253M | med 258M (254M-275M) | Top10 100.0% | #1 0.0% || 4. The Devil Wears Prada 2 | banked 220M | med 222M (221M-230M) | Top10 100.0% | #1 0.0% || 5. Backrooms | banked 194M | med 204M (196M-224M) | Top10 100.0% | #1 0.0%"</pluto-output><pre class="pl-code"><code class="pl-jl">nearby(Int64(scen), Int64(rank))</code></pre></div>
 <div class="pl-cell"><pluto-output class="rich_output" id="out-a0000000-0000-0000-0000-000000000013"><div class="markdown"><hr />
-<p>Local Pluto notebook &#40;<code>notebooks/smw2026.jl</code>&#41; has the full sortable table &#43; charts.</p>
+<p>Local Pluto notebook &#40;<code>notebooks/smw2026.jl</code>&#41; has continuous sliders, full tables, and charts.</p>
 </div></pluto-output></div>
 </main>
 <script src="smw2026_wasm.islands/shim.js"></script>
