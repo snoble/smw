@@ -1,0 +1,23 @@
+# Julia depot kept inside the project by shell.nix
+/.julia_depot/
+
+# Julia
+/Manifest.toml
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+/docs/build/
+
+# Pluto notebook autosave / backups
+*.jl.backup
+.pluto_states/
+
+# Editor / OS
+.DS_Store
+.vscode/
+*.swp
+
+# Model artifacts / cached posterior draws
+/output/
+*.jls
+*.arrow

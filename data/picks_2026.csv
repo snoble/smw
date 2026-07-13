@@ -1,0 +1,79 @@
+player,rank,film,dark_horse
+Jeff,1,Toy Story 5,false
+Jeff,2,Spider-Man: Brand New Day,false
+Jeff,3,The Odyssey,false
+Jeff,4,Moana,false
+Jeff,5,Minions & Monsters,false
+Jeff,6,The Devil Wears Prada 2,false
+Jeff,7,Star Wars: The Mandalorian and Grogu,false
+Jeff,8,Supergirl,false
+Jeff,9,Scary Movie,false
+Jeff,10,Mortal Kombat II,false
+Jeff,,Disclosure Day,true
+Jeff,,Masters of the Universe,true
+Jeff,,Evil Dead Burn,true
+Devindra,1,Spider-Man: Brand New Day,false
+Devindra,2,The Odyssey,false
+Devindra,3,Toy Story 5,false
+Devindra,4,Minions & Monsters,false
+Devindra,5,Star Wars: The Mandalorian and Grogu,false
+Devindra,6,Moana,false
+Devindra,7,Supergirl,false
+Devindra,8,The Devil Wears Prada 2,false
+Devindra,9,Mortal Kombat II,false
+Devindra,10,Disclosure Day,false
+Devindra,,Obsession,true
+Devindra,,Billie Eilish: Hit Me Hard and Soft,true
+Devindra,,Scary Movie,true
+Germain,1,Spider-Man: Brand New Day,false
+Germain,2,Toy Story 5,false
+Germain,3,The Odyssey,false
+Germain,4,Minions & Monsters,false
+Germain,5,Moana,false
+Germain,6,Star Wars: The Mandalorian and Grogu,false
+Germain,7,The Devil Wears Prada 2,false
+Germain,8,Disclosure Day,false
+Germain,9,Supergirl,false
+Germain,10,Scary Movie,false
+Germain,,Mortal Kombat II,true
+Germain,,Masters of the Universe,true
+Germain,,Obsession,true
+Peter,1,Toy Story 5,false
+Peter,2,Spider-Man: Brand New Day,false
+Peter,3,Minions & Monsters,false
+Peter,4,Moana,false
+Peter,5,The Odyssey,false
+Peter,6,The Devil Wears Prada 2,false
+Peter,7,Star Wars: The Mandalorian and Grogu,false
+Peter,8,Supergirl,false
+Peter,9,Disclosure Day,false
+Peter,10,Scary Movie,false
+Peter,,Masters of the Universe,true
+Peter,,Mortal Kombat II,true
+Peter,,Evil Dead Burn,true
+David,1,Spider-Man: Brand New Day,false
+David,2,Toy Story 5,false
+David,3,Minions & Monsters,false
+David,4,Moana,false
+David,5,The Odyssey,false
+David,6,Supergirl,false
+David,7,Star Wars: The Mandalorian and Grogu,false
+David,8,The Devil Wears Prada 2,false
+David,9,Scary Movie,false
+David,10,Mortal Kombat II,false
+David,,Disclosure Day,true
+David,,Jackass: Best and Last,true
+David,,Masters of the Universe,true
+BJ,1,Toy Story 5,false
+BJ,2,Spider-Man: Brand New Day,false
+BJ,3,The Odyssey,false
+BJ,4,Minions & Monsters,false
+BJ,5,Supergirl,false
+BJ,6,Moana,false
+BJ,7,Star Wars: The Mandalorian and Grogu,false
+BJ,8,Disclosure Day,false
+BJ,9,The Devil Wears Prada 2,false
+BJ,10,Masters of the Universe,false
+BJ,,PAW Patrol: The Dino Movie,true
+BJ,,Evil Dead Burn,true
+BJ,,Obsession,true
