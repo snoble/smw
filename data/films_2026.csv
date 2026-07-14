@@ -1,19 +1,32 @@
 title,release_date,released,cumulative_gross,as_of,type,date_source,opening_prior_m,notes
-The Devil Wears Prada 2,2026-04-30,true,220446934,2026-07-13,comedy,est,,season opener
+The Devil Wears Prada 2,2026-05-01,true,220446934,2026-07-13,comedy,bom,,wager starts Apr 30; official release May 1 (BOM)
+Hokum,2026-05-01,true,17000014,2026-07-13,comedy,bom,,
+Mortal Kombat II,2026-05-08,true,79755207,2026-07-13,franchise,bom,,
+The Sheep Detectives,2026-05-08,true,65981673,2026-07-13,animation,bom,,BOM summer trajectory
+Billie Eilish: Hit Me Hard and Soft,2026-05-08,true,9901485,2026-07-13,drama,bom,,concert doc; dark-horse pick
 Obsession,2026-05-15,true,253322400,2026-07-13,drama,est,,
-Mortal Kombat II,2026-05-22,true,79755207,2026-07-13,franchise,est,,
 Star Wars: The Mandalorian and Grogu,2026-05-22,true,177364989,2026-07-13,franchise,known,,
+Passenger,2026-05-22,true,18041122,2026-07-13,horror,bom,,
 Backrooms,2026-05-29,true,194197303,2026-07-13,horror,est,,
+The Breadwinner,2026-05-29,true,20247080,2026-07-13,drama,bom,,
+Pressure,2026-05-29,true,15569855,2026-07-13,drama,bom,,
+The Amazing Digital Circus: The Last Act,2026-06-04,true,23421793,2026-07-13,animation,bom,,
 Scary Movie,2026-06-05,true,107493031,2026-07-13,comedy,known,,
 Masters of the Universe,2026-06-05,true,64257291,2026-07-13,franchise,est,,
 Disclosure Day,2026-06-12,true,111313915,2026-07-13,drama,known,,
+The Furious,2026-06-12,true,6446171,2026-07-13,franchise,bom,,
 Toy Story 5,2026-06-19,true,403772720,2026-07-13,animation,known,,
+Leviticus,2026-06-19,true,7033780,2026-07-13,drama,bom,,
+The Death of Robin Hood,2026-06-19,true,5256056,2026-07-13,drama,bom,,
 Supergirl,2026-06-26,true,66001114,2026-07-13,superhero,known,,
-The Sheep Detectives,2026-06-26,true,65981673,2026-07-13,animation,est,,
+Jackass: Best and Last,2026-06-26,true,17299729,2026-07-13,comedy,bom,,dark-horse pick; event comedy
+The Invite,2026-06-26,true,7384506,2026-07-13,horror,bom,,
 Minions & Monsters,2026-07-01,true,108273335,2026-07-13,animation,known,,
-Moana,2026-07-10,true,43000000,2026-07-13,animation,known,,live-action; early in run
+Young Washington,2026-07-03,true,33105849,2026-07-13,drama,bom,,
+Moana,2026-07-10,true,43000000,2026-07-13,animation,known,,live-action remake with cartoon legs; OW ≈ week 1
+Evil Dead Burn,2026-07-10,true,13700000,2026-07-13,horror,bom,,dark-horse pick
 Cut Off,2026-07-17,false,0,2026-07-13,drama,known,8,unreleased; mid specialty
-The Odyssey,2026-07-17,false,0,2026-07-13,drama,known,85,unreleased (Nolan event)
+The Odyssey,2026-07-17,false,0,2026-07-13,drama,known,105,unreleased (Nolan); tracking ~$100-120M open mid
 Spider-Man: Brand New Day,2026-07-31,false,0,2026-07-13,superhero,known,180,unreleased; tentpole (slider overrides)
 Ice Cream Man,2026-08-07,false,0,2026-07-13,horror,known,18,unreleased; mid horror
 One Night Only,2026-08-07,false,0,2026-07-13,comedy,known,6,unreleased; small comedy
@@ -29,6 +42,3 @@ Coyote vs. Acme,2026-08-28,false,0,2026-07-13,animation,known,22,unreleased; sho
 The Dog Stars,2026-08-28,false,0,2026-07-13,drama,known,5,unreleased; tiny drama runway
 Finding Emily,2026-08-28,false,0,2026-07-13,drama,known,3,unreleased; micro drama
 Fall 2: Deadpoint,2026-09-02,false,0,2026-07-13,franchise,known,20,unreleased; ~5 days before cutoff
-Evil Dead Burn,2026-05-08,true,0,2026-07-13,horror,est,,dark-horse pick; low gross
-Jackass: Best and Last,2026-08-07,false,0,2026-07-13,comedy,est,22,dark-horse pick; event comedy
-Billie Eilish: Hit Me Hard and Soft,2026-06-05,true,0,2026-07-13,drama,est,,concert doc; dark-horse pick

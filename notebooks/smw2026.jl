@@ -64,6 +64,8 @@ unreleased films. Defaults match the CSV priors.
 # ╔═╡ 55555555-5555-5555-5555-555555555555
 md"""
 **Spider-Man: Brand New Day** opening (\$M)
+
+Tracking hint: Deadline **\$180–190M** (Jul 2026); Boxoffice Pro long-range **\$230–250M**.
 """
 
 # ╔═╡ 55555555-5555-5555-5555-555555555556
@@ -72,10 +74,12 @@ md"""
 # ╔═╡ 55555555-5555-5555-5555-555555555557
 md"""
 **The Odyssey** opening (\$M)
+
+Tracking hint: Boxoffice Pro / BOT **~\$100–120M**; earlier Deadline range **\$80–100M**.
 """
 
 # ╔═╡ 55555555-5555-5555-5555-555555555558
-@bind odyssey_open UISlider(30:5:150, default=85, show_value=true)
+@bind odyssey_open UISlider(30:5:150, default=105, show_value=true)
 
 # ╔═╡ 55555555-5555-5555-5555-555555555559
 md"""

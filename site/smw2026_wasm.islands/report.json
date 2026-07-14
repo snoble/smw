@@ -1,1 +1,0 @@
-[{"arg_types":["Int64","Int64","Int64","Int64","Int64"],"bonds":["in_i","mu_i","od_i","paw_i","sp_i"],"cells":[{"id":"a0000000-0000-0000-0000-000000000018","ok":true}],"judgement":"island","oracle_samples":5,"oracle_skipped":null,"reasons":[]}]

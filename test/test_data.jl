@@ -4,6 +4,12 @@
     @test t_cutoff(Date(2026, 8, 28)) ≈ run_weeks(Date(2026, 8, 28), SEASON_CUTOFF)
     @test SEASON_START == Date(2026, 4, 30)
     @test SEASON_CUTOFF == Date(2026, 9, 7)
+    # Opening weekend calendar days map to a full exhibition week
+    @test observation_run_weeks(Date(2026, 7, 10), Date(2026, 7, 10)) == 1.0  # Fri
+    @test observation_run_weeks(Date(2026, 7, 10), Date(2026, 7, 12)) == 1.0  # Sun
+    @test observation_run_weeks(Date(2026, 7, 10), Date(2026, 7, 13)) == 1.0  # Mon OW print
+    @test observation_run_weeks(Date(2026, 7, 10), Date(2026, 7, 17)) ≈ 1.0
+    @test observation_run_weeks(Date(2026, 7, 10), Date(2026, 7, 24)) ≈ 2.0
 end
 
 @testset "load_films variants" begin
@@ -48,6 +54,7 @@ end
         Film("Unreleased", Date(2026, 8, 1), false, 0.0, Date(2026, 7, 1), "drama", "", 5.0),
     ]
     mktempdir() do dir
+        # Backward-compatible schema (no theaters/source)
         weekly = joinpath(dir, "weekly.csv")
         open(weekly, "w") do io
             println(io, "film,date,cumulative_gross")
@@ -58,11 +65,26 @@ end
         @test length(obs) == 2
         @test obs[1].film == "InWeekly"
         @test obs[1].t ≈ 1.0
+        @test ismissing(obs[1].theaters)
+        @test obs[1].source == ""
+
+        # Extended schema with theaters + source
+        weekly_ext = joinpath(dir, "weekly_ext.csv")
+        open(weekly_ext, "w") do io
+            println(io, "film,date,cumulative_gross,theaters,source")
+            println(io, "InWeekly,2026-05-08,500000,3000,bom")
+            println(io, "InWeekly,2026-05-15,1000000,2800,bom")
+        end
+        obs_ext = load_weekly(weekly_ext, films)
+        @test obs_ext[1].theaters == 3000
+        @test obs_ext[1].source == "bom"
+        @test obs_ext[2].theaters == 2800
 
         extras = SMW.fallback_observations(films, obs)
         @test length(extras) == 1
         @test extras[1].film == "OnlyRegistry"
         @test extras[1].cumulative_gross == 2e6
+        @test extras[1].source == "registry"
 
         @test_throws ErrorException load_weekly(weekly, Film[])  # unknown after empty known set
         # Explicit unknown title
@@ -73,6 +95,40 @@ end
         end
         @test_throws ErrorException load_weekly(bad, films)
     end
+end
+
+@testset "interval_observations" begin
+    obs = [
+        Observation("A", Date(2026, 5, 8), 10.0, 1.0; theaters = 100, source = "bom"),
+        Observation("A", Date(2026, 5, 15), 25.0, 2.0; theaters = 80, source = "bom"),
+        Observation("B", Date(2026, 5, 8), 5.0, 0.5; theaters = missing, source = "est"),
+    ]
+    intervals = interval_observations(obs)
+    a = filter(i -> i.film == "A", intervals)
+    @test length(a) == 2
+    @test a[1].t_start == 0.0
+    @test a[1].t_end == 1.0
+    @test a[1].interval_gross == 10.0
+    @test a[1].theaters_end == 100
+    @test a[2].t_start == 1.0
+    @test a[2].t_end == 2.0
+    @test a[2].interval_gross == 15.0
+    @test a[2].theaters_end == 80
+    b = only(i for i in intervals if i.film == "B")
+    @test b.interval_gross == 5.0
+    @test ismissing(b.theaters_end)
+end
+
+@testset "Sheep Detectives audit anchors" begin
+    season = load_season(DATA)
+    sheep = only(f for f in season.films if f.title == "The Sheep Detectives")
+    @test sheep.release_date == Date(2026, 5, 8)
+    @test sheep.type == "animation"
+    sheep_obs = filter(o -> o.film == "The Sheep Detectives", season.observations)
+    latest = argmax(o -> (o.date, o.t), sheep_obs)
+    @test latest.theaters <= 200
+    odyssey = only(f for f in season.films if f.title == "The Odyssey")
+    @test odyssey.opening_prior_m == 105.0
 end
 
 @testset "load_picks errors + dark horses" begin

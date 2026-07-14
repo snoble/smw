@@ -18,6 +18,20 @@ struct Observation
     date::Date
     cumulative_gross::Float64
     t::Float64  # fractional run-weeks since release
+    theaters::Union{Missing,Int}
+    source::String
+end
+
+"""Backward-compatible constructor: theaters/source optional."""
+function Observation(
+    film::String,
+    date::Date,
+    cumulative_gross::Float64,
+    t::Float64;
+    theaters::Union{Missing,Int} = missing,
+    source::String = "",
+)
+    return Observation(film, date, cumulative_gross, t, theaters, source)
 end
 
 struct PlayerPicks
@@ -37,6 +51,22 @@ end
 function run_weeks(release::Date, as_of::Date)
     days = Dates.value(as_of - release)
     return max(days / 7.0, 0.0)
+end
+
+"""
+Observation-time run-weeks for likelihood / pinning.
+
+Opening weekend (Fri–Sun, and the Monday report that usually closes OW) is
+treated as a full exhibition week (`t = 1`). Fri–Sun is most of week-1 revenue,
+so timestamping those rows at `days/7 ≈ 0.3–0.4` makes the curve think most of
+the opening week is still ahead and overstates remaining upside.
+"""
+function observation_run_weeks(release::Date, as_of::Date)
+    days = Dates.value(as_of - release)
+    days < 0 && return 0.0
+    # days 0..3 cover Fri open through the Monday OW print
+    days <= 3 && return 1.0
+    return days / 7.0
 end
 
 """Run-weeks a film gets before Labor Day cutoff."""
@@ -69,6 +99,20 @@ function load_films(path::AbstractString)
     return films
 end
 
+function _row_theaters(row)::Union{Missing,Int}
+    if !hasproperty(row, :theaters) || ismissing(row.theaters) || row.theaters === ""
+        return missing
+    end
+    return Int(row.theaters)
+end
+
+function _row_source(row)::String
+    if !hasproperty(row, :source) || ismissing(row.source)
+        return ""
+    end
+    return String(row.source)
+end
+
 function load_weekly(path::AbstractString, films::AbstractVector{Film})
     by_title = Dict(f.title => f for f in films)
     df = CSV.read(path, DataFrame)
@@ -80,10 +124,37 @@ function load_weekly(path::AbstractString, films::AbstractVector{Film})
         date = Date(row.date)
         push!(
             obs,
-            Observation(title, date, Float64(row.cumulative_gross), run_weeks(release, date)),
+            Observation(
+                title,
+                date,
+                Float64(row.cumulative_gross),
+                observation_run_weeks(release, date);
+                theaters = _row_theaters(row),
+                source = _row_source(row),
+            ),
         )
     end
-    return obs
+    return collapse_same_t_observations(obs)
+end
+
+"""Keep the latest / highest cumulative when several rows share the same `t`."""
+function collapse_same_t_observations(obs::AbstractVector{Observation})
+    by_key = Dict{Tuple{String,Float64},Observation}()
+    for o in obs
+        key = (o.film, o.t)
+        if !haskey(by_key, key)
+            by_key[key] = o
+            continue
+        end
+        prev = by_key[key]
+        better =
+            o.cumulative_gross > prev.cumulative_gross ||
+            (o.cumulative_gross == prev.cumulative_gross && o.date >= prev.date)
+        if better
+            by_key[key] = o
+        end
+    end
+    return sort!(collect(values(by_key)); by = o -> (o.film, o.t, o.date))
 end
 
 """Fallback observations from films registry when a released film has no weekly rows."""
@@ -94,11 +165,58 @@ function fallback_observations(films::AbstractVector{Film}, weekly::AbstractVect
         if f.released && f.cumulative_gross > 0 && !(f.title in seen)
             push!(
                 extras,
-                Observation(f.title, f.as_of, f.cumulative_gross, run_weeks(f.release_date, f.as_of)),
+                Observation(
+                    f.title,
+                    f.as_of,
+                    f.cumulative_gross,
+                    observation_run_weeks(f.release_date, f.as_of);
+                    theaters = missing,
+                    source = "registry",
+                ),
             )
         end
     end
     return extras
+end
+
+"""
+Convert sorted cumulative rows per film into non-overlapping increments.
+
+Returns a vector of named tuples
+`(film, t_start, t_end, interval_gross, theaters_end)`.
+The first interval for each film starts at `t_start = 0` (release).
+"""
+function interval_observations(obs::AbstractVector{Observation})
+    by_film = Dict{String,Vector{Observation}}()
+    for o in obs
+        push!(get!(Vector{Observation}, by_film, o.film), o)
+    end
+    intervals = NamedTuple{
+        (:film, :t_start, :t_end, :interval_gross, :theaters_end),
+        Tuple{String,Float64,Float64,Float64,Union{Missing,Int}},
+    }[]
+    for (film, rows) in by_film
+        sort!(rows; by = o -> (o.t, o.date))
+        prev_t = 0.0
+        prev_c = 0.0
+        for o in rows
+            o.t >= prev_t || continue
+            interval_gross = max(0.0, o.cumulative_gross - prev_c)
+            push!(
+                intervals,
+                (
+                    film = film,
+                    t_start = prev_t,
+                    t_end = o.t,
+                    interval_gross = interval_gross,
+                    theaters_end = o.theaters,
+                ),
+            )
+            prev_t = o.t
+            prev_c = o.cumulative_gross
+        end
+    end
+    return intervals
 end
 
 function load_picks(path::AbstractString, films::AbstractVector{Film})

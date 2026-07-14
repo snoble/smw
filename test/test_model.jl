@@ -87,8 +87,7 @@ end
     floors = observed_floors(season)
     times = observed_times(season)
     @test floors["Moana"] >= 43_000_000
-    @test times["Moana"] > 0
-    @test times["Moana"] < 1.0  # mid-opening as of latest weekly
+    @test times["Moana"] == 1.0  # OW print treated as end of week 1
 
     # Observation with zero gross is skipped in times; older t not preferred
     films = [Film("Z", Date(2026, 5, 1), true, 10.0, Date(2026, 5, 8), "drama", "", missing)]

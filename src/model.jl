@@ -138,7 +138,7 @@ function observed_times(season::SeasonData)
     times = Dict{String,Float64}()
     for f in season.films
         if f.released && f.cumulative_gross > 0
-            times[f.title] = run_weeks(f.release_date, f.as_of)
+            times[f.title] = observation_run_weeks(f.release_date, f.as_of)
         end
     end
     for o in season.observations

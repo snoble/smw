@@ -1,31 +1,51 @@
-film,date,cumulative_gross
-The Devil Wears Prada 2,2026-05-03,78000000
-The Devil Wears Prada 2,2026-07-13,220446934
-Obsession,2026-05-17,92000000
-Obsession,2026-07-13,253322400
-Evil Dead Burn,2026-05-10,8500000
-Evil Dead Burn,2026-07-13,18500000
-Mortal Kombat II,2026-05-24,42000000
-Mortal Kombat II,2026-07-13,79755207
-Star Wars: The Mandalorian and Grogu,2026-05-24,88000000
-Star Wars: The Mandalorian and Grogu,2026-07-13,177364989
-Backrooms,2026-05-31,72000000
-Backrooms,2026-07-13,194197303
-Scary Movie,2026-06-07,48000000
-Scary Movie,2026-07-13,107493031
-Masters of the Universe,2026-06-07,28000000
-Masters of the Universe,2026-07-13,64257291
-Billie Eilish: Hit Me Hard and Soft,2026-06-07,4200000
-Billie Eilish: Hit Me Hard and Soft,2026-07-13,9800000
-Disclosure Day,2026-06-14,45000000
-Disclosure Day,2026-07-13,111313915
-Toy Story 5,2026-06-21,185000000
-Toy Story 5,2026-07-13,403772720
-Supergirl,2026-06-28,32000000
-Supergirl,2026-07-13,66001114
-The Sheep Detectives,2026-06-28,29000000
-The Sheep Detectives,2026-07-13,65981673
-Minions & Monsters,2026-07-05,62000000
-Minions & Monsters,2026-07-13,108273335
-Moana,2026-07-12,28000000
-Moana,2026-07-13,43000000
+film,date,cumulative_gross,theaters,source
+The Devil Wears Prada 2,2026-05-03,78000000,4200,est
+The Devil Wears Prada 2,2026-07-13,220446934,1800,est
+Hokum,2026-07-13,17000014,2200,bom
+Mortal Kombat II,2026-05-10,42000000,3800,est
+Mortal Kombat II,2026-07-13,79755207,1200,est
+The Sheep Detectives,2026-05-08,15000000,3554,bom
+The Sheep Detectives,2026-05-15,29900000,3554,bom
+The Sheep Detectives,2026-05-22,43700000,3207,bom
+The Sheep Detectives,2026-05-29,54600000,2810,bom
+The Sheep Detectives,2026-06-05,59500000,1757,bom
+The Sheep Detectives,2026-06-12,62400000,1420,bom
+The Sheep Detectives,2026-06-19,64600000,520,bom
+The Sheep Detectives,2026-06-26,65600000,286,bom
+The Sheep Detectives,2026-07-03,65900000,160,bom
+The Sheep Detectives,2026-07-13,65981673,160,bom
+Billie Eilish: Hit Me Hard and Soft,2026-05-10,5200000,1400,est
+Billie Eilish: Hit Me Hard and Soft,2026-07-13,9901485,200,bom
+Obsession,2026-05-17,92000000,4000,est
+Obsession,2026-07-13,253322400,1500,est
+Star Wars: The Mandalorian and Grogu,2026-05-24,88000000,4300,est
+Star Wars: The Mandalorian and Grogu,2026-07-13,177364989,2100,est
+Passenger,2026-07-13,18041122,2800,bom
+Backrooms,2026-05-31,72000000,3600,est
+Backrooms,2026-07-13,194197303,1400,est
+The Breadwinner,2026-07-13,20247080,2500,bom
+Pressure,2026-07-13,15569855,2400,bom
+The Amazing Digital Circus: The Last Act,2026-07-13,23421793,3000,bom
+Scary Movie,2026-06-07,48000000,3500,est
+Scary Movie,2026-07-13,107493031,1600,est
+Masters of the Universe,2026-06-07,28000000,3400,est
+Masters of the Universe,2026-07-13,64257291,1100,est
+Disclosure Day,2026-06-14,45000000,3200,est
+Disclosure Day,2026-07-13,111313915,1300,est
+The Furious,2026-07-13,6446171,2100,bom
+Toy Story 5,2026-06-21,185000000,4300,est
+Toy Story 5,2026-07-13,403772720,3800,est
+Leviticus,2026-07-13,7033780,1800,bom
+The Death of Robin Hood,2026-07-13,5256056,1600,bom
+Supergirl,2026-06-28,32000000,4000,est
+Supergirl,2026-07-13,66001114,2500,est
+Jackass: Best and Last,2026-06-28,9800000,3000,est
+Jackass: Best and Last,2026-07-13,17299729,1800,bom
+The Invite,2026-07-13,7384506,2200,bom
+Minions & Monsters,2026-07-05,62000000,4100,est
+Minions & Monsters,2026-07-13,108273335,3800,est
+Young Washington,2026-07-13,33105849,3200,bom
+Moana,2026-07-12,28000000,4000,est
+Moana,2026-07-13,43000000,4000,est
+Evil Dead Burn,2026-07-12,9800000,3200,est
+Evil Dead Burn,2026-07-13,13700000,3200,bom

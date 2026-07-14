@@ -61,43 +61,43 @@ PlutoUI's as `UISlider`).
 nix-shell --run 'julia --project scripts/smoke.jl'
 ```
 
-## Browser WASM viewer (experimental)
+## Static browser viewer
 
-The full Turing notebook cannot run in WasmTarget. Instead:
+The viewer conditions the full 2026 slate **in-browser**: fitted historical type priors and
+raw interval observations are shipped as a versioned input bundle (no posterior draws).
+A Web Worker runs nested quadrature + progressive Monte Carlo (1k preview → 20k final).
+A Julia/WasmTarget numeric kernel is compiled for the same ABI (`site/wasm/smw_kernel.wasm`);
+the worker currently uses a JS fallback for draws and reports `wasm binary present` when the
+module loads.
 
-1. **Offline (Julia 1.11 / nix-shell):** precompute posteriors → `notebooks/generated/viewer_data.jl`
-2. **Lean notebook:** [`notebooks/smw2026_wasm.jl`](notebooks/smw2026_wasm.jl) switches Spider-Man opening scenarios in pure Julia
-3. **Export (Julia 1.12 + Snapshot.jl):** compile `@bind` cells to WASM islands
-4. **Serve locally** over HTTP
+Design notes: [docs/brainstorms/2026-07-13-julia-wasm-bayesian-engine-brainstorm.md](docs/brainstorms/2026-07-13-julia-wasm-bayesian-engine-brainstorm.md).
 
 ```bash
-# 1) model data (nix-shell / Julia 1.11)
+# Regenerate site/smw2026_data.json after model or data changes (no NUTS)
 nix-shell --run 'julia --project scripts/export_viewer_data.jl'
 
-# 2) Julia 1.12 for Snapshot / WasmTarget
-chmod +x scripts/install_julia_1_12.sh scripts/serve_wasm_site.sh
-./scripts/install_julia_1_12.sh
+# Recompile the WasmTarget kernel (Julia 1.12 local toolchain)
+.julia_versions/1.12.6/bin/julia --project=wasm scripts/wasm_spike.jl
 
-# 3) export static site (needs Node with WasmGC — Homebrew node 25+)
-export PATH="/opt/homebrew/opt/node/bin:$PATH"
-.julia_versions/1.12.6/bin/julia --project=wasm scripts/build_wasm_site.jl
-
-# 4) open in browser
+# Open in a browser
 ./scripts/serve_wasm_site.sh
 # → http://127.0.0.1:8765/smw2026_wasm.html
 ```
 
 Commit the regenerated `site/` directory; GitHub Actions deploys it to GitHub Pages on every push to `main`.
 
-Season-total model: **already banked + positive remaining gross** (geometric decay pinned to the latest observation; sub-week pins floor at 1 week so early weak openers don't explode).
+Season-total model: **already banked + positive remaining gross** (geometric decay pinned to the latest observation; theater-tail soft constraint near end of run).
 
 ## Data files
 
 | File | Role |
 |---|---|
 | `data/films_2026.csv` | Candidate universe (registry + optional `opening_prior_m` for unreleased) |
-| `data/weekly_2026.csv` | Cumulative gross observations over time |
+| `data/weekly_2026.csv` | Cumulative gross + theaters + source over time |
+| `data/exclusions_2026.csv` | Pre-window titles excluded from the wager |
 | `data/picks_2026.csv` | Player Top 10 + dark horses |
 | `data/historical/films_history.csv` | Training trajectories (synthetic placeholder for now) |
-| `notebooks/smw2026_wasm.jl` | WASM-friendly interactive viewer |
-| `notebooks/generated/viewer_data.jl` | Precomputed scenarios (generated) |
+| `site/smw2026_wasm.html` | Fully-static interactive viewer |
+| `site/smw2026_data.json` | Versioned input bundle: priors, intervals, picks (generated) |
+| `site/smw_engine_worker.js` | Progressive inference Web Worker |
+| `site/wasm/smw_kernel.wasm` | WasmTarget-compiled numeric kernel |
